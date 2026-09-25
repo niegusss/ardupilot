@@ -105,7 +105,10 @@ float Sailboat::get_yaw_rate(float steering, float speed) const
         return rate;
     } 
     
-    if (is_zero(speed) && skid_steering) {
+    if (skid_steering) {
+        // differential thrust turns the hull directly, at any speed; previously this was
+        // only used at a speed of exactly zero, so any small residual speed (drift, braking)
+        // fell through to the rudder turn-circle formula and a skid boat could not pivot
         rate = steering * M_PI * 5;
     } else {
         float d = get_turn_circle(steering);
